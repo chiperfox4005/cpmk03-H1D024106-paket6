@@ -3,7 +3,7 @@ import 'peserta_model.dart';
 
 class PesertaAdapter extends TypeAdapter<Peserta> {
   @override
-  final int typeId = 6; // typeId unik sesuai instruksi Paket 6
+  final int typeId = 6;
 
   @override
   Peserta read(BinaryReader reader) {
@@ -12,7 +12,8 @@ class PesertaAdapter extends TypeAdapter<Peserta> {
       nama: reader.readString(),
       email: reader.readString(),
       prodi: reader.readString(),
-      waktuDaftar: reader.readDateTime(),
+      // Baca sebagai int, lalu ubah kembali menjadi DateTime
+      waktuDaftar: DateTime.fromMillisecondsSinceEpoch(reader.readInt()),
       hadir: reader.readBool(),
     );
   }
@@ -23,7 +24,8 @@ class PesertaAdapter extends TypeAdapter<Peserta> {
     writer.writeString(obj.nama);
     writer.writeString(obj.email);
     writer.writeString(obj.prodi);
-    writer.writeDateTime(obj.waktuDaftar);
+    // Simpan DateTime sebagai int (milliseconds)
+    writer.writeInt(obj.waktuDaftar.millisecondsSinceEpoch);
     writer.writeBool(obj.hadir);
   }
 }
