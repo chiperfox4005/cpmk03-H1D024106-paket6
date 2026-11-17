@@ -25,7 +25,6 @@ class PesertaController extends GetxController {
   List<Peserta> get displayList {
     List<Peserta> list = pesertaList.toList();
     
-    // PERBAIKAN: Menambahkan kurung kurawal {} untuk menghindari warning
     if (filterStatus.value == 'Hadir') {
       list = list.where((p) => p.hadir).toList();
     } else if (filterStatus.value == 'Belum Hadir') {
@@ -34,7 +33,7 @@ class PesertaController extends GetxController {
 
     final q = keyword.value.toLowerCase();
     if (q.isNotEmpty) {
-      list = list.where((p) => p.nama.toLowerCase().contains(q) || p.nim.contains(q)).toList();
+      list = list.where((p) => p.nama.toLowerCase().contains(q) || p.nim.toLowerCase().contains(q)).toList();
     }
     
     list.sort((a, b) => b.waktuDaftar.compareTo(a.waktuDaftar));
@@ -77,12 +76,13 @@ class PesertaController extends GetxController {
     if (!formKey.currentState!.validate()) return;
     
     final nim = nimC.text.trim();
-    if (pesertaList.any((p) => p.nim == nim && p.nim != editingNim)) {
+    // Cek duplikat (case-insensitive)
+    if (pesertaList.any((p) => p.nim.toLowerCase() == nim.toLowerCase() && p.nim.toLowerCase() != (editingNim?.toLowerCase() ?? ''))) {
       Get.snackbar('Gagal', 'NIM $nim sudah terdaftar', snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
-    final existing = isEdit ? pesertaList.firstWhere((p) => p.nim == editingNim) : null;
+    final existing = isEdit ? pesertaList.firstWhere((p) => p.nim.toLowerCase() == editingNim!.toLowerCase()) : null;
     final peserta = Peserta(
       nim: nim, 
       nama: namaC.text.trim(), 
@@ -125,17 +125,17 @@ class PesertaController extends GetxController {
     loadData();
   }
 
-  // PERBAIKAN: Menambahkan kurung kurawal {}
   void setFilter(String status) {
     filterStatus.value = status;
   }
 
   void tutup<T>([T? result]) => Get.key.currentState?.pop<T>(result);
 
+  // PERBAIKAN: Validasi NIM menerima huruf dan angka (8-12 karakter)
   String? validateNim(String? v) {
     if (v == null || v.trim().isEmpty) return 'NIM wajib diisi';
-    if (int.tryParse(v.trim()) == null) return 'NIM harus berupa angka';
-    if (v.trim().length < 8 || v.trim().length > 12) return 'NIM harus 8-12 digit';
+    final regex = RegExp(r'^[a-zA-Z0-9]{8,12}$');
+    if (!regex.hasMatch(v.trim())) return 'NIM harus 8-12 karakter (huruf & angka)';
     return null;
   }
   
