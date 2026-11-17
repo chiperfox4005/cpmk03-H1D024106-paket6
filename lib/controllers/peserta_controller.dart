@@ -24,13 +24,19 @@ class PesertaController extends GetxController {
 
   List<Peserta> get displayList {
     List<Peserta> list = pesertaList.toList();
-    if (filterStatus.value == 'Hadir') list = list.where((p) => p.hadir).toList();
-    else if (filterStatus.value == 'Belum Hadir') list = list.where((p) => !p.hadir).toList();
+    
+    // PERBAIKAN: Menambahkan kurung kurawal {} untuk menghindari warning
+    if (filterStatus.value == 'Hadir') {
+      list = list.where((p) => p.hadir).toList();
+    } else if (filterStatus.value == 'Belum Hadir') {
+      list = list.where((p) => !p.hadir).toList();
+    }
 
     final q = keyword.value.toLowerCase();
     if (q.isNotEmpty) {
       list = list.where((p) => p.nama.toLowerCase().contains(q) || p.nim.contains(q)).toList();
     }
+    
     list.sort((a, b) => b.waktuDaftar.compareTo(a.waktuDaftar));
     return list;
   }
@@ -51,20 +57,25 @@ class PesertaController extends GetxController {
 
   void openAddForm() {
     editingNim = null;
-    nimC.clear(); namaC.clear(); emailC.clear();
+    nimC.clear(); 
+    namaC.clear(); 
+    emailC.clear();
     prodiC.value = daftarProdi.first;
     Get.toNamed(AppRoutes.form);
   }
 
   void openEditForm(Peserta p) {
     editingNim = p.nim;
-    nimC.text = p.nim; namaC.text = p.nama; emailC.text = p.email;
+    nimC.text = p.nim; 
+    namaC.text = p.nama; 
+    emailC.text = p.email;
     prodiC.value = p.prodi;
     Get.toNamed(AppRoutes.form);
   }
 
   Future<void> save() async {
     if (!formKey.currentState!.validate()) return;
+    
     final nim = nimC.text.trim();
     if (pesertaList.any((p) => p.nim == nim && p.nim != editingNim)) {
       Get.snackbar('Gagal', 'NIM $nim sudah terdaftar', snackPosition: SnackPosition.BOTTOM);
@@ -73,13 +84,19 @@ class PesertaController extends GetxController {
 
     final existing = isEdit ? pesertaList.firstWhere((p) => p.nim == editingNim) : null;
     final peserta = Peserta(
-      nim: nim, nama: namaC.text.trim(), email: emailC.text.trim(), prodi: prodiC.value,
+      nim: nim, 
+      nama: namaC.text.trim(), 
+      email: emailC.text.trim(), 
+      prodi: prodiC.value,
       waktuDaftar: isEdit ? existing!.waktuDaftar : DateTime.now(),
       hadir: isEdit ? existing!.hadir : false,
     );
 
-    if (isEdit) await _service.update(peserta);
-    else await _service.create(peserta);
+    if (isEdit) {
+      await _service.update(peserta);
+    } else {
+      await _service.create(peserta);
+    }
 
     loadData();
     tutup();
@@ -95,6 +112,7 @@ class PesertaController extends GetxController {
         FilledButton(onPressed: () => tutup(true), child: const Text('Hapus')),
       ],
     ));
+    
     if (yakin == true) {
       await _service.delete(p.nim);
       loadData();
@@ -107,7 +125,11 @@ class PesertaController extends GetxController {
     loadData();
   }
 
-  void setFilter(String status) => filterStatus.value = status;
+  // PERBAIKAN: Menambahkan kurung kurawal {}
+  void setFilter(String status) {
+    filterStatus.value = status;
+  }
+
   void tutup<T>([T? result]) => Get.key.currentState?.pop<T>(result);
 
   String? validateNim(String? v) {
@@ -116,7 +138,9 @@ class PesertaController extends GetxController {
     if (v.trim().length < 8 || v.trim().length > 12) return 'NIM harus 8-12 digit';
     return null;
   }
+  
   String? validateNama(String? v) => (v == null || v.trim().isEmpty) ? 'Nama wajib diisi' : null;
+  
   String? validateEmail(String? v) {
     if (v == null || v.trim().isEmpty) return 'Email wajib diisi';
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(v.trim()) ? null : 'Format email tidak valid';
@@ -124,7 +148,9 @@ class PesertaController extends GetxController {
 
   @override
   void onClose() {
-    nimC.dispose(); namaC.dispose(); emailC.dispose();
+    nimC.dispose(); 
+    namaC.dispose(); 
+    emailC.dispose();
     super.onClose();
   }
 }
