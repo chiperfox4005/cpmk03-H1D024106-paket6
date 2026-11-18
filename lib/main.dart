@@ -17,12 +17,18 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Presensi Seminar', debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
-      initialRoute: AppRoutes.home, getPages: AppPages.pages,
+      title: 'Presensi Seminar',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorSchemeSeed: Colors.indigo,
+        useMaterial3: true,
+      ),
+      initialRoute: AppRoutes.home, 
+      getPages: AppPages.pages,
     );
   }
 }
