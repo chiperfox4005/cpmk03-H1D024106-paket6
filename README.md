@@ -15,12 +15,12 @@ Arsitektur aplikasi mengacu pada pola Model-View-Controller (MVC) untuk memisahk
 ## Fitur Utama
 1. **Operasi CRUD Lengkap**: Penambahan, pembacaan, pembaruan, dan penghapusan data peserta dengan dialog konfirmasi.
 2. **Validasi Formulir**: 
-   - NIM: Wajib diisi, hanya angka, panjang 8–12 digit, dan unik.
+   - NIM: Wajib diisi, kombinasi huruf dan angka, panjang 8–12 karakter, dan unik.
    - Nama: Wajib diisi.
    - Email: Wajib diisi dengan format yang valid.
    - Program Studi: Pilihan dari dropdown (minimal 3 opsi).
 3. **Fitur Khusus Paket 6**:
-   - Checkbox status kehadiran yang dapat diubah secara langsung dari halaman daftar tanpa membuka formulir edit.
+   - Tombol status kehadiran yang dapat diubah secara langsung dari halaman daftar tanpa membuka formulir edit.
    - Statistik kehadiran dinamis pada AppBar (format: "Hadir X/Y").
    - Filter data reaktif berdasarkan status kehadiran (Semua, Hadir, Belum Hadir).
 4. **Pencarian Data**: Filter real-time berdasarkan NIM atau nama peserta.
@@ -39,3 +39,5 @@ Pastikan Flutter SDK telah terinstal dan dikonfigurasi pada sistem sebelum menja
 1. Klon repositori ini ke direktori lokal:
    ```bash
    git clone https://github.com/chiperfox4005/cpmk03-H1D024106-paket6.git
+
+2. Youtube https://youtu.be/WvWUv4YcLnY
