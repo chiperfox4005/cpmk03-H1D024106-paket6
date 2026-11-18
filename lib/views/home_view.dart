@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/peserta_controller.dart';
-import '../routes/app_routes.dart'; // <--- PERBAIKAN 1: Import AppRoutes
+import '../routes/app_routes.dart'; 
 
 class HomeView extends GetView<PesertaController> {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // PERBAIKAN 2: Theme.of(context), bukan Theme.ofContext
+ 
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -215,7 +215,7 @@ class HomeView extends GetView<PesertaController> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
-                      // PERBAIKAN 3: AppRoutes.peserta sekarang dikenali karena sudah di-import
+                
                       onPressed: () => Get.toNamed(AppRoutes.peserta),
                       icon: const Icon(Icons.manage_accounts),
                       label: const Padding(
